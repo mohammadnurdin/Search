@@ -36,8 +36,11 @@ Route::middleware('auth')->group(
     //route departement
     Route::resource('departements', DepartementController::class);
     Route::get('departement/export-pdf', [DepartementController::class, 'exportPdf'])->name('departement.export-pdf');
+    Route::get('position/export-excel', [PositionController::class, 'exportExcel'])->name('position.exportExcel');
 
     Route::resource('user', UserController::class);
     Route::get('users/export-pdf', [UserController::class, 'exportPdf'])->name('users.export-Pdf');
+    
+
         
 });
