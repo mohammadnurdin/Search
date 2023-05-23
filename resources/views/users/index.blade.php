@@ -38,6 +38,7 @@
             'Tidak Ada'
             }}
         </td> -->
+    <!-- </tr> -->
         <td>
             <form action="{{ route('user.destroy',$data->id) }}" method="Post">
                 <a class="btn btn-primary" href="{{ route('user.edit',$data->id) }}">Edit</a>
