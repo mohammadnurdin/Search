@@ -41,6 +41,7 @@ Route::middleware('auth')->group(
     Route::resource('user', UserController::class);
     Route::get('users/export-pdf', [UserController::class, 'exportPdf'])->name('users.export-Pdf');
     
-
+    Route::resource('kegiatans', KegiatanController::class);
+    Route::resource('workshops', WorkshopController::class);
         
 });
