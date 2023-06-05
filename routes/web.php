@@ -43,5 +43,6 @@ Route::middleware('auth')->group(
     
     Route::resource('kegiatans', KegiatanController::class);
     Route::resource('workshops', WorkshopController::class);
+    Route::resource('workshopsdetail', WorkshopdetailController::class);
         
 });
