@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController; // untuk mendaftarkan user controler
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\DepartementController;
+use App\Http\Controllers\WorkshopController;
+use App\Http\Controllers\KegiatanController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -41,8 +44,8 @@ Route::middleware('auth')->group(
     Route::resource('user', UserController::class);
     Route::get('users/export-pdf', [UserController::class, 'exportPdf'])->name('users.export-Pdf');
     
-    Route::resource('kegiatans', KegiatanController::class);
     Route::resource('workshops', WorkshopController::class);
-    Route::resource('workshopsdetail', WorkshopdetailController::class);
+    Route::get('search/kegiatan', [KegiatanController::class, 'autocomplete'])->name('search.kegiatan');
+    Route::resource('kegiatans', KegiatanController::class);
         
 });
