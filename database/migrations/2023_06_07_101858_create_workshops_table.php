@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('id_workshop');
             $table->string('nama_workshop');
-            $table->string('tanggal');
-            $table->string('ketua');
+            $table->date('tanggal');
+            $table->string('koordinator');            
             $table->timestamps();
         });
     }

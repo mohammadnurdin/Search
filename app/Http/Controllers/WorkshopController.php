@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Models\Workshop;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Monolog\Handler\IFTTTHandler;
+use PgSql\Result;
 
 class WorkshopController extends Controller
 {
@@ -33,15 +35,27 @@ class WorkshopController extends Controller
             'tanggal' => $request->tanggal,
             'ketua' => $request->ketua,
         ];
-        for ($i=1; $i <= 2; $i++) {
-            $details = [
+        // // for ($i=1; $i <= 2; $i++) {
+        // //     $details = [
 
-            ];
-        }
-
-        dd($request);
+        // //     ];
+        // // }
+        // // dd($request);
         
-        Workshop::create($request->post());
+        // Workshop::create($request->post());
+
+        if($result = Workshop::create($workshop)){
+            for ($i=1; $i <= $request->jml; $i++){
+                $details = [
+                    'id_workshop' => $request->id_workshop,
+                    'acara' => $request['acara'.$i],
+                    'tempat' => $request['tempat'.$i],
+                    'pelaksana' => $request['pelaksana'.$i],
+                    'ketua' => $request['ketua'.$i],
+                ];
+                Workshop::create($details);
+            }
+        }
 
         return redirect()->route('workshops.index')->with('success','Workshops has been created successfully.');
     }
@@ -55,6 +69,7 @@ class WorkshopController extends Controller
     {
         $title = "Edit Data workshop";
         $managers = User::where('position', '1')->orderBy('id','asc')->get();
+        // $detail = Detail::where('no_rab', $details->no_rab)->orderBy('id', 'asc')->get();
         return view('workshops.edit',compact('departement' , 'title', 'managers'));
     }
 

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('acara')->nullable();
             $table->string('tempat')->nullable();
             $table->string('pelaksana')->nullable();
+            $table->string('sesi')->nullable();
             $table->timestamps();
         });
     }
