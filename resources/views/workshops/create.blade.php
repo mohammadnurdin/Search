@@ -32,8 +32,8 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
-                <strong>Ketua:</strong>
-                <select name="ketua" id="ketua" class="form-select">
+                <strong>Koordinator:</strong>
+                <select name="Koordinator" id="Koordinator" class="form-select">
                     <option value="">Pilih</option>
                     @foreach($managers as $item)
                     <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -65,18 +65,29 @@
                         <th scope="col">Tempat</th>
                         <th scope="col">Pelaksana</th>
                         <th scope="col">Sesi</th>
-                        <th scope="col">Koordinator</th>
+                        <!-- <th scope="col">Koordinator</th> -->
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody id="detail">
                 </tbody>
             </table>
-            <div class="row col-xs-12 col-sm-12 col-md-12 mt-3">
+            <!-- <div class="row col-xs-12 col-sm-12 col-md-12 mt-3">
                 <div class="col-md-10 form-group">
                     <strong> Grand Total :</strong>
                     <input type="text" name="jml" class="form-control" placeholder="Masukan Acara">
                     @error('tanggal')
+                    <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3 ml-3">Submit</button>
+        </div> -->
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group">
+                    <strong>Jumlah Data :</strong>
+                    <input type="text" name="jumlah" class="form-control" placeholder="Jumlah Data">
+                    @error('jumlah')
                     <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
                     @enderror
                 </div>
@@ -133,10 +144,11 @@
                     '<td><input type="text" name="tempat' + no + '" class="form-control" value="' + data.tempat + '"></td>' +
                     '<td><input type="text" name="pelaksana' + no + '" class="form-control" value="' + data.pelaksana + '"></td>' +
                     '<td><input type="text" name="sesi' + no + '" class="form-control" value="' + data.sesi + '"></td>' +
-                    '<td><input type="text" name="koordinator' + no + '" class="form-control"></td>' +
+                    // '<td><input type="text" name="koordinator' + no + '" class="form-control" value="'+ data.koordinator +'"></td>' +
                     '<td><a href="#" class="btn btn-sm btn-danger">X</a></td>' +
                     '</tr>';
                 $('#detail').html(html);
+                $("input[name=jumlah]").val(no);
             }
         });
     }
@@ -155,7 +167,7 @@
     //         var sub = $("input[name=sub_total"+i+"]").val();
     //         total = total + parseInt(sub);
     //     }
-    //     $("input[name=total]").val(total);
-    // }
+    //     $("input[name=jumlah]").val(total);
+    // // }
 </script>
 @endsection

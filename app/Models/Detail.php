@@ -9,11 +9,10 @@ class Detail extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'acara',
-        'tempat',
-        'pelaksana',
-        'tanggal',
-        'ketua',
+        'id_workshop',
+        'id_kegiatan',
+        'peserta',
+        'keterangan'
     ];
 
     public function getDetail(){

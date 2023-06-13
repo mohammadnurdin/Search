@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Models\Workshop;
 use App\Models\User;
+use App\Models\Detail;
+use App\Charts\WorkshopLineChart;
 use Illuminate\Http\Request;
 use Monolog\Handler\IFTTTHandler;
 use PgSql\Result;
@@ -26,14 +28,14 @@ class WorkshopController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_workshop' => 'required',
+            'id_workshop' => 'required'
         ]);
 
         $workshop = [
             'id_workshop' => $request->id_workshop,
             'nama_workshop' => $request->nama_workshop,
             'tanggal' => $request->tanggal,
-            'ketua' => $request->ketua,
+            'koordinator' => $request->koordinator,
         ];
         // // for ($i=1; $i <= 2; $i++) {
         // //     $details = [
@@ -48,12 +50,12 @@ class WorkshopController extends Controller
             for ($i=1; $i <= $request->jml; $i++){
                 $details = [
                     'id_workshop' => $request->id_workshop,
-                    'acara' => $request['acara'.$i],
-                    'tempat' => $request['tempat'.$i],
-                    'pelaksana' => $request['pelaksana'.$i],
-                    'ketua' => $request['ketua'.$i],
+                    'id_kegiatan' => $request['id_kegiatan'.$i],
+                    'peserta' => $request['peserta'.$i],
+                    'keterangan' => $request['keterangan'.$i]
+                
                 ];
-                Workshop::create($details);
+                Detail::create($details);
             }
         }
 
@@ -69,20 +71,34 @@ class WorkshopController extends Controller
     {
         $title = "Edit Data workshop";
         $managers = User::where('position', '1')->orderBy('id','asc')->get();
-        // $detail = Detail::where('no_rab', $details->no_rab)->orderBy('id', 'asc')->get();
+        $detail = Detail::where('no_workshop', $workshop->id_workshop)->orderBy('id', 'asc')->get();
         return view('workshops.edit',compact('departement' , 'title', 'managers'));
     }
 
     public function update(Request $request, Workshop $workshop)
     {
-        $request->validate([
-            'name' => 'required',
-            'location' => 'required',
-            'manager_id' => 'required',
-        ]);
-        
-        $workshop->fill($request->post())->save();
-
+        $workshops = [
+            'id_workshop' => $request->id_workshop,
+            'nama_workshop' => $request->nama_workshop,
+            'tanggal' => $request->tanggal,
+            'koordinator' => $request->koordinator,
+            // 'total' => $request->total,
+        ];
+        if ($workshop->fill($workshops)->save()){
+            Detail::where('no_dok', $workshop->id_workshop)->delete();
+            for ($i=1; $i <= $request->jml; $i++) { 
+                $details = [
+                    'no_workshop' => $workshop->id_workshop,
+                    'id_workshop' => $request['id_workshop'.$i],
+                    'nama_workshop' => $request['nama_workshop'.$i],
+                    'tanggal' => $request['tanggal'.$i],
+                    'koordinator' => $request['koordinator'.$i],
+                    'peserta' => $request['peserta'.$i],
+                    'keterangan' => $request['keterangan'.$i],
+                ];
+                Detail::create($details);
+            }
+        }
         return redirect()->route('workshops.index')->with('success','Departement Has Been updated successfully');
     }
 
@@ -90,6 +106,39 @@ class WorkshopController extends Controller
     {
         $workshop->delete();
         return redirect()->route('workshops.index')->with('success','Departement has been deleted successfully');
+    }
+
+    public function chartLine()
+    {
+        $api = url(route('workshops.chartLineAjax'));
+   
+        $chart = new WorkshopLineChart;
+        $chart->labels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])->load($api);
+        $title = "Chart Ajax";
+        return view('home', compact('chart','title'));
+    }
+   
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    public function chartLineAjax(Request $request)
+    {
+        $year = $request->has('year') ? $request->year : date('Y');
+        $workshops = Workshop::select(\DB::raw("COUNT(*) as count"))
+                    ->whereYear('tanggal', $year)
+                    ->groupBy(\DB::raw("Month(tanggal)"))
+                    ->pluck('count');
+  
+        $chart = new WorkshopLineChart;
+  
+        $chart->dataset('New Workshop Register Chart', 'line', $workshops)->options([
+                    'fill' => 'true',
+                    'borderColor' => '#51C1C0'
+                ]);
+  
+        return $chart->api();
     }
 
 }
