@@ -15,7 +15,7 @@ class Detail extends Model
         'keterangan'
     ];
 
-    public function getDetail(){
-        return $this->belongsTO(User::class,'id_workshop', 'id');
+    public function getKegiatan(){
+        return $this->belongsTO(Kegiatan::class,'id_kegiatan', 'id');
     }
 }

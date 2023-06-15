@@ -7,8 +7,8 @@
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Id Workshop:</strong>
-                <input type="text" name="id_workshop" class="form-control" placeholder="ID Workshop">
-                @error('name')
+                <input type="text" name="id_workshop" class="form-control" placeholder="ID Workshop" value="{{ $workshop->id_workshop }}" disabled>
+                @error('id_workshop')
                 <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
                 @enderror
             </div>
@@ -16,7 +16,7 @@
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Bulan Workshop:</strong>
-                <input type="text" name="bulan" class="form-control" placeholder="Bulan Workshop">
+                <input type="text" name="bulan" class="form-control" placeholder="Bulan Workshop" value="{{ $workshop->bulan }}">
                 @error('bulan')
                 <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
                 @enderror
@@ -25,7 +25,7 @@
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Nama Workshop:</strong>
-                <input type="text" name="nama_workshop" class="form-control" placeholder="nama_workshop">
+                <input type="text" name="nama_workshop" class="form-control" placeholder="nama_workshop" value="{{ $workshop->nama_workshop }}">
                 @error('name')
                 <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
                 @enderror
@@ -37,10 +37,10 @@
                 <select name="ketua" id="ketua" class="form-select">
                     <option value="">Pilih</option>
                     @foreach($managers as $item)
-                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                    <option value="{{ $item->id }}" {{ ($item->id==$workshop->ketua)? 'selected': ''}}>{{ $item->name }}</option>
                     @endforeach
                 </select>
-                @error('alias')
+                @error('id_ketua')
                 <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
                 @enderror
             </div>
@@ -78,11 +78,11 @@
                 <?php $no++?>
                 <tr>
                     <td>
-                        <input type="hidden" name="id_kegiatan{{$no}}" class="form-control" value="{{$item->id_kegiatan}}">
+                        <input type="hidden" name="kegiatanId{{$no}}" class="form-control" value="{{$item->id_kegiatan}}">
                         <span>{{$no}}</span>
                     </td>
                     <td>
-                        <input type="text" name="acara{{$no}}" class="form-control" value="{{$item->acara}}">
+                        <input type="text" name="acara{{$no}}" class="form-control" value="{{$item->getKegiatan->acara}}">
                     </td>
                     <td>
                         <input type="text" name="tempat{{$no}}" class="form-control" value="{{$item->tempat}}">
@@ -178,7 +178,7 @@
                     '<td><input type="text" name="pelaksana' + no + '" class="form-control" value="' + data.pelaksana + '"></td>' +
                     '<td><input type="text" name="peserta' + no + '" class="form-control"></td>' +
                     '<td><input type="text" name="keterangan' + no + '" class="form-control"></td>' +
-                    '<td><a href="#" class="btn btn-sm btn-danger">X</a></td>' +
+                    '<td><a href="#" class="btn btn-sm btn-danger">Delete</a></td>' +
                     '</tr>';
                 $('#detail').html(html);
                 $("input[name=jml]").val(no);

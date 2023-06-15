@@ -80,7 +80,7 @@ class WorkshopController extends Controller
     public function update(Request $request, Workshop $workshop)
     {
         $workshops = [
-            'id_workshop' => $request->id_workshop,
+            'id_workshop' => $workshop->id_workshop,
             'nama_workshop' => $request->nama_workshop,
             'bulan' => $request->bulan,
             'ketua' => $request->ketua,
@@ -92,22 +92,22 @@ class WorkshopController extends Controller
                 $details = [
                     'id_workshop' => $workshop->id_workshop,
                     'id_kegiatan' => $request['id_kegiatan'.$i],
-                    'nama_workshop' => $request['nama_workshop'.$i],
-                    'bulan' => $request['bulan'.$i],
-                    'ketua' => $request['ketua'.$i],
+                    'acara' => $request['acara'.$i],
+                    'tempat' => $request['tempat'.$i],
+                    'pelaksana' => $request['ketua'.$i],
                     'peserta' => $request['peserta'.$i],
                     'keterangan' => $request['keterangan'.$i],
                 ];
                 Detail::create($details);
             }
         }
-        return redirect()->route('workshops.index')->with('success','Departement Has Been updated successfully');
+        return redirect()->route('workshops.index')->with('success','Workshop Has Been updated successfully');
     }
 
     public function destroy(Workshop $workshop)
     {
         $workshop->delete();
-        return redirect()->route('workshops.index')->with('success','Departement has been deleted successfully');
+        return redirect()->route('workshops.index')->with('success','Workshop has been deleted successfully');
     }
 
     public function exportPdf()
