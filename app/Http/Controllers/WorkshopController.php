@@ -1,20 +1,22 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Workshop;
 use App\Models\User;
 use App\Models\Detail;
-use App\Charts\WorkshopLineChart;
 use Illuminate\Http\Request;
-use Monolog\Handler\IFTTTHandler;
-use PgSql\Result;
+use App\Charts\WorkshopLineChart;
+
+// use Monolog\Handler\IFTTTHandler;
+// use PgSql\Result;
 
 class WorkshopController extends Controller
 {
     public function index()
     {   
         $title = "Data Workshop";
-        $workshops = Workshop::orderBy('id','asc')->paginate(5);
+        $workshops = Workshop::orderBy('id','asc')->get();
         return view('workshops.index', compact(['workshops' , 'title']));
     }
 
@@ -34,8 +36,8 @@ class WorkshopController extends Controller
         $workshop = [
             'id_workshop' => $request->id_workshop,
             'nama_workshop' => $request->nama_workshop,
-            'tanggal' => $request->tanggal,
-            'koordinator' => $request->koordinator,
+            'bulan' => $request->bulan,
+            'ketua' => $request->ketua,
         ];
         // // for ($i=1; $i <= 2; $i++) {
         // //     $details = [
@@ -71,8 +73,8 @@ class WorkshopController extends Controller
     {
         $title = "Edit Data workshop";
         $managers = User::where('position', '1')->orderBy('id','asc')->get();
-        $detail = Detail::where('no_workshop', $workshop->id_workshop)->orderBy('id', 'asc')->get();
-        return view('workshops.edit',compact('departement' , 'title', 'managers'));
+        $detail = Detail::where('id_workshop', $workshop->id_workshop)->orderBy('id', 'asc')->get();
+        return view('workshops.edit',compact('workshop' , 'title', 'managers', 'detail'));
     }
 
     public function update(Request $request, Workshop $workshop)
@@ -80,19 +82,19 @@ class WorkshopController extends Controller
         $workshops = [
             'id_workshop' => $request->id_workshop,
             'nama_workshop' => $request->nama_workshop,
-            'tanggal' => $request->tanggal,
-            'koordinator' => $request->koordinator,
+            'bulan' => $request->bulan,
+            'ketua' => $request->ketua,
             // 'total' => $request->total,
         ];
         if ($workshop->fill($workshops)->save()){
-            Detail::where('no_dok', $workshop->id_workshop)->delete();
+            Detail::where('id_workshop', $workshop->id_workshop)->delete();
             for ($i=1; $i <= $request->jml; $i++) { 
                 $details = [
-                    'no_workshop' => $workshop->id_workshop,
-                    'id_workshop' => $request['id_workshop'.$i],
+                    'id_workshop' => $workshop->id_workshop,
+                    'id_kegiatan' => $request['id_kegiatan'.$i],
                     'nama_workshop' => $request['nama_workshop'.$i],
-                    'tanggal' => $request['tanggal'.$i],
-                    'koordinator' => $request['koordinator'.$i],
+                    'bulan' => $request['bulan'.$i],
+                    'ketua' => $request['ketua'.$i],
                     'peserta' => $request['peserta'.$i],
                     'keterangan' => $request['keterangan'.$i],
                 ];
@@ -106,6 +108,15 @@ class WorkshopController extends Controller
     {
         $workshop->delete();
         return redirect()->route('workshops.index')->with('success','Departement has been deleted successfully');
+    }
+
+    public function exportPdf()
+    {
+        $title = "Laporan Data Workshop";
+        $workshops = Workshop::orderBy('id', 'asc')->get();
+
+        $pdf = PDF::loadview('workshops.pdf', compact(['workshops', 'title']));
+        return $pdf->stream('laporan-workshops-pdf');
     }
 
     public function chartLine()
@@ -133,7 +144,7 @@ class WorkshopController extends Controller
   
         $chart = new WorkshopLineChart;
   
-        $chart->dataset('New Workshop Register Chart', 'line', $workshops)->options([
+        $chart->dataset('Workshop Register Chart', 'line', $workshops)->options([
                     'fill' => 'true',
                     'borderColor' => '#51C1C0'
                 ]);

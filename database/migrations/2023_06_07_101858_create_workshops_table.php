@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('workshops', function (Blueprint $table) {
             $table->id();
-            $table->string('id_workshop');
-            $table->string('nama_workshop');
-            $table->date('tanggal');
-            $table->string('koordinator');            
+            $table->string('id_workshop')->nullable();
+            $table->string('nama_workshop')->nullable();
+            $table->string('bulan')->nullable();
+            $table->integer('ketua')->nullable();            
             $table->timestamps();
         });
     }

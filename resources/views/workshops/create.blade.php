@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
-                <strong>ID Workshop:</strong>
+                <strong>Id Workshop:</strong>
                 <input type="text" name="id_workshop" class="form-control" placeholder="ID Workshop">
                 @error('name')
                 <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
@@ -14,9 +14,9 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
-                <strong>Tanggal Workshop:</strong>
-                <input type="date" name="tanggal" class="form-control" placeholder="Tanggal Workshop">
-                @error('location')
+                <strong>Bulan Workshop:</strong>
+                <input type="text" name="bulan" class="form-control" placeholder="Bulan Workshop">
+                @error('bulan')
                 <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
                 @enderror
             </div>
@@ -32,8 +32,8 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
-                <strong>Koordinator:</strong>
-                <select name="Koordinator" id="Koordinator" class="form-select">
+                <strong>Ketua:</strong>
+                <select name="ketua" id="ketua" class="form-select">
                     <option value="">Pilih</option>
                     @foreach($managers as $item)
                     <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -48,7 +48,7 @@
         <div class="row col-xs-12 col-sm-12 col-md-12 mt-3">
             <div class="col-md-10 form-group">
                 <input type="text" name="search" id="search" class="form-control" placeholder="Masukan Acara">
-                @error('name')
+                @error('acara')
                 <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
                 @enderror
             </div>
@@ -64,8 +64,8 @@
                         <th scope="col">Acara</th>
                         <th scope="col">Tempat</th>
                         <th scope="col">Pelaksana</th>
-                        <th scope="col">Sesi</th>
-                        <!-- <th scope="col">Koordinator</th> -->
+                        <th scope="col">Peserta</th>
+                        <th scope="col">Keterangan</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -85,9 +85,9 @@
         </div> -->
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
-                    <strong>Jumlah Data :</strong>
-                    <input type="text" name="jumlah" class="form-control" placeholder="Jumlah Data">
-                    @error('jumlah')
+                    <strong>Jumlah Acara :</strong>
+                    <input type="text" name="jml" class="form-control" placeholder="Jumlah Data">
+                    @error('bulan')
                     <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
                     @enderror
                 </div>
@@ -116,8 +116,20 @@
         },
         select: function(event, ui) {
             $('#search').val(ui.item.label);
-            //    console.log(ui.item); 
-            add(ui.item.id);
+           console.log($("input[name=jml]").val());
+            if($("input[name=jml]").val() > 0){
+                for (let i = 1; i <=  $("input[name=jml]").val(); i++) {
+                    id = $("input[name=id_kegiatan"+i+"]").val();
+                    if(id==ui.item.id){
+                        alert(ui.item.value+' sudah ada!');
+                        break;
+                    }else{
+                        add(ui.item.id);
+                    }
+                }
+            }else{
+                add(ui.item.id);
+            } 
             return false;
         }
     });
@@ -143,12 +155,12 @@
                     '<td><input type="text" name="acara' + no + '" class="form-control" value="' + data.acara + '"></td>' +
                     '<td><input type="text" name="tempat' + no + '" class="form-control" value="' + data.tempat + '"></td>' +
                     '<td><input type="text" name="pelaksana' + no + '" class="form-control" value="' + data.pelaksana + '"></td>' +
-                    '<td><input type="text" name="sesi' + no + '" class="form-control" value="' + data.sesi + '"></td>' +
-                    // '<td><input type="text" name="koordinator' + no + '" class="form-control" value="'+ data.koordinator +'"></td>' +
+                    '<td><input type="text" name="peserta' + no + '" class="form-control"></td>' +
+                    '<td><input type="text" name="keterangan' + no + '" class="form-control"></td>' +
                     '<td><a href="#" class="btn btn-sm btn-danger">X</a></td>' +
                     '</tr>';
                 $('#detail').html(html);
-                $("input[name=jumlah]").val(no);
+                $("input[name=jml]").val(no);
             }
         });
     }

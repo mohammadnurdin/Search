@@ -11,7 +11,6 @@ class Kegiatan extends Model
     protected $fillable = [
         'acara', 
         'tempat', 
-        'pelaksana',
-        'sesi'
+        'pelaksana'
     ];
 }

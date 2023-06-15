@@ -25,7 +25,7 @@ class KegiatanController extends Controller
     public function index()
     {   
         $title = "Data Kegiatan";
-        $kegiatans = Kegiatan::orderBy('id','asc')->paginate(20);
+        $kegiatans = Kegiatan::orderBy('id','asc')->get();
         return view('kegiatans.index', compact(['kegiatans' , 'title']));
     }
 
@@ -38,7 +38,7 @@ class KegiatanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'no_workshop' => 'required'
+            'id_workshop' => 'required'
         ]);
 
         var_dump($request);
@@ -61,7 +61,6 @@ class KegiatanController extends Controller
             'acara' => 'required',
             'tempat' => 'required',
             'pelaksana' => 'required',
-            'sesi' => 'required',
         ]);
 
         $kegiatan->fill($request->post())->save();

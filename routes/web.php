@@ -29,8 +29,9 @@ Route::post('login', [UserController::class, 'login_action'])->name('login.actio
 Route::middleware('auth')->group(
     function () {
         Route::get('/', function () {
-            return view('home', ['title' => 'Home']);
+            return view('home', ['title' => 'Chart Ajax']);
         })->name('home');
+
         Route::get('password', [UserController::class, 'password'])->name('password');
         Route::post('password', [UserController::class, 'password_action'])->name('password.action');
         Route::get('logout', [UserController::class, 'logout'])->name('logout');
@@ -43,10 +44,12 @@ Route::middleware('auth')->group(
 
         Route::resource('user', UserController::class);
         Route::get('users/export-pdf', [UserController::class, 'exportPdf'])->name('users.export-Pdf');
-        Route::get('workshops/export-pdf', [WorkshopController::class, 'exportPdf'])->name('workshops.export-Pdf');
+        // Route::get('workshops/export-pdf', [WorkshopController::class, 'exportPdf'])->name('workshops.export-Pdf');
 
         Route::resource('workshops', WorkshopController::class);
-        Route::get('home',[ WorkshopController::class, 'chartLine']);
+        
+        
+        Route::get('home',[ WorkshopController::class, 'chartLine'])->name('workshops.chartLine');
         Route::get('chart-line-ajax',[ WorkshopController::class, 'chartLineAjax'])->name('workshops.chartLineAjax');
 
 

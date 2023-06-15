@@ -30,14 +30,14 @@
         <td>{{ $data->name }}</td>
         <td>{{ $data->email }}</td>
         <td>{{ $data->password }}</td>
-        <td>{{ $data->position }}</td>
-        <td>{{ $data->name }}</td>
-        <!-- <td>{{ 
+        <!-- <td>{{ $data->position }}</td> -->
+        <!-- <td>{{ $data->name }}</td> -->
+        <td>{{ 
             (isset($data->getManager->name)) ?
             $data->getManager->name :
             'Tidak Ada'
             }}
-        </td> -->
+        </td>
     <!-- </tr> -->
         <td>
             <form action="{{ route('user.destroy',$data->id) }}" method="Post">

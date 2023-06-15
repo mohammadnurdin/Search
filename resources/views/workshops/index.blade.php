@@ -8,30 +8,36 @@
 </div>
 @endif
 <div class="text-end mb-2">
-<a class="btn btn-light" href="{{ route('workshops.exportPdf') }}"> Export</a>
-<a class="btn btn-secondary" href="{{ route('workshops.create') }}"> Add Departement</a>
+<a class="btn btn-warning" href="{{ route('workshops.chartLine') }}"> Chart</a>
+<a class="btn btn-secondary" href="{{ route('workshops.create') }}"> Add Workshop</a>
 </div>
 <table id="example" class="table table-striped" style="width:100%">
   <thead>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">Nama</th>
-      <th scope="col">Keterangan</th>
-      <th scope="col">Manager Name</th>
+      <th scope="col">No</th>
+      <th scope="col">Kode Workshop</th>
+      <th scope="col">Bulan Kegiatan</th>
+      <th scope="col">Ketua</th>
+      <th scope="col">Nama Workshop</th>
+      <th scope="col">Jumlah</th>
       <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
+  @php $no = 1 @endphp
     @foreach ($workshops as $data)
     <tr>
-        <td>{{ $workshops->id }}</td>
-        <td>{{ $workshops->name }}</td>
-        <td>{{ $workshops->location }}</td>
+        <td>{{ $no ++ }}</td>
+        <td>{{ $data->id_workshop }}</td>
+        <td>{{ $data->bulan }}</td>
         <td>{{ 
-          (isset($workshops->getManager->email)) ? 
-          $workshops->getManager->email : 
+          (isset($data->getManager->name)) ? 
+          $data->getManager->name : 
           'Tidak Ada'
           }}
+        <td>{{ $data->nama_workshop }}</td>
+        <td>{{ $data->detail->count() }}</td>
+      
         </td>
         <td>
             <form action="{{ route('workshops.destroy',$data->id) }}" method="Post">

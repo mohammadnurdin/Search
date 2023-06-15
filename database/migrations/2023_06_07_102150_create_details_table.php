@@ -16,10 +16,9 @@ return new class extends Migration
         Schema::create('details', function (Blueprint $table) {
             $table->id();
             $table->string('id_workshop')->nullable();
-            $table->string('id_kegiatan')->nullable();
+            $table->integer('id_kegiatan')->nullable();
             $table->string('peserta')->nullable();
             $table->string('keterangan')->nullable();
-
             $table->timestamps();
         });
     }

@@ -12,7 +12,16 @@ class Workshop extends Model
     protected $fillable = [
         'id_workshop', 
         'nama_workshop', 
-        'tanggal',
-        'koordinator',
+        'bulan',
+        'ketua',
     ];
+    public function detail()
+    {
+        return $this->hasMany(Detail::class, 'id_workshop', 'id_workshop');
+    }
+
+    public function getManager()
+    {
+        return $this->belongsTo(User::class, 'ketua', 'id');
+    }
 }
